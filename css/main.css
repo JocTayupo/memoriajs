@@ -4,24 +4,46 @@
     flex-direction: column;
     margin : auto;
     width: 80%;
+    max-width: 640px;
     height: 95vh;
 }
 .container .tablero{
-    /*border: solid 1px #E933FF;*/
+    background-color: #E0DDE4;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-evenly;
+    width: 100%;
+    max-width: 640px;
     height: 75%;
-
 }
 .container .tablero .tarjeta{
- border: solid 1px #000000;
- height: 30%;
- width: 30%;
+ border-radius: 10px 10px 10px 10px;
+ -moz-border-radius: 10px 10px 10px 10px;
+ -webkit-border-radius: 10px 10px 10px 10px;
+  border: 5px solid #279AF1;
+  background-color: #FFFBFA;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  font-weight: bold;
+ height: 22%;
+ width: 25%;
  cursor: pointer;
 }
 .container .marcador{
-   /* border: solid 1px #335BFF;*/
+    background-color: #E0DDE4;
     height: 25%;
+    width: 100%;
+    max-width: 640px;
+}
+
+.circulo {
+    width: 75px;
+    height: 75px;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+    /*background: #5cb85c*/;
 }
