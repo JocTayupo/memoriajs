@@ -17,86 +17,91 @@ function showCurtain(ids){
     }
 }
 
-function gameOver(tarjetas,parejas){
-    let complete = 0;
-    if((tarjetas.length/2) == parejas){
+function gameOver(cards,pairs){
+    let final = 0;
+    if((cards.length/2) == pairs){
         let boton = document.getElementById('boton');
         boton.style.display ='flex';
         boton.addEventListener("click",function(){
             location.reload();
         });
-        complete = 1;
+        final = 1;
     }
-
-    return complete;
+    return final;
 }
 
 function main(){
-    let tarjetas = document.getElementsByClassName('tarjeta');
-    let parejas = 0;
-    let seleccionados = [];
-    let complete = 0;
-    let colores = ['#f90429','#7657f2','#0d9914','#ddd60f','#1980e8','#989ca0','#43EF4C','#FD9BA9','#90C2F4','#A999EB','#F58A07'];
-    let indicesTarjetas = [];
-    let segundos = 0;
-    let indice,tarjeta1,tarjeta2;
+    let colorList = ['#f90429','#7657f2','#0d9914','#ddd60f','#1980e8','#989ca0','#43EF4C','#FD9BA9','#90C2F4','#A999EB','#F58A07'];
+    let cardList = document.getElementsByClassName('tarjeta');
+    let indexCards = [];
+    let selectedCards = [];
+    let pairs = 0;
+    let final = 0;
+    let seconds = 0;
+    let card;
+    let color;
+
     const selectCard =  ()=> {
-        let tarjeta;
-        tarjeta = aleatorioIndex(indicesTarjetas);
-        tarjeta = indicesTarjetas.indexOf(tarjeta);
-        tarjeta = indicesTarjetas.splice(tarjeta,1);
-        return tarjeta;
+        let card;
+        card = aleatorioIndex(indexCards);
+        card = indexCards.indexOf(card);
+        card = indexCards.splice(card,1);
+        return card;
     }
 
-    const addEvent = (tarjeta) =>{
-         tarjeta.addEventListener("click",function(){
-             console.log(seleccionados);
-             if(seleccionados.length<2){
-                let cortina = document.getElementById(`cor_${this.id}`);
-                seleccionados.push(this);
-                cortina.classList.remove ('cortina');
-                if(seleccionados.length == 2 ){
-                    if(seleccionados[0].getAttribute("data-color") == seleccionados[1].getAttribute("data-color")){
-                        parejas+=1;
-                        seleccionados = [];
-                        complete = gameOver(tarjetas,parejas);
-                    }else{
-                        setTimeout(function name() {
-                            showCurtain([seleccionados[0].id,seleccionados[1].id]);
-                            seleccionados = [];
-                        },1500);
+    const addEvent = (card) =>{
+        card.addEventListener("click",function(){
+        if(selectedCards.length < 2 && !this.classList.contains('disabled')){
+            console.log(this);
+            let cortina = document.getElementById(`cor_${this.id}`);
+            selectedCards.push(this);
+            cortina.classList.remove ('cortina');
+            this.classList.add('disabled');
+            if(selectedCards.length == 2 ){
+                if(selectedCards[0].getAttribute("data-color") == selectedCards[1].getAttribute("data-color")){
+                    pairs += 1;
+                    selectedCards = [];
+                    final = gameOver(cardList,pairs);
+                }else{
+                    selectedCards[0].classList.remove('disabled');
+                    selectedCards[1].classList.remove('disabled');
+                    setTimeout(function name() {
+                        showCurtain([selectedCards[0].id,selectedCards[1].id]);
+                        selectedCards = [];
+                    },1500);
                         
-                    }
                 }
-             }
-             console.log(seleccionados);
-             
-         })
-        
+            }
+        }      
+        })      
+    }
+    
+    for (let i = 0; i < cardList.length; i++) {
+        indexCards.push(i);       
     }
 
-    for (let i = 0; i < tarjetas.length; i++) {
-        indicesTarjetas.push(i);       
-    }
-    for (i = 0; i < 6; i++) {
-        color = aleatorioIndex(colores);
-        color = colores.splice(color,1);
-        tarjeta1 = selectCard();
-        tarjeta2 = selectCard();
-        tarjetas[tarjeta1].appendChild(createCricle(color));
-        tarjetas[tarjeta2].appendChild(createCricle(color));
-        tarjetas[tarjeta1].setAttribute('data-color',color);
-        tarjetas[tarjeta2].setAttribute('data-color',color);
-        addEvent(tarjetas[tarjeta1]);
-        addEvent(tarjetas[tarjeta2]);
+    /// Inicializacion de las tarjetas en el tablero 
+    for (i = 0; i < cardList.length/2; i++) {
+        color = aleatorioIndex(colorList);
+        color = colorList.splice(color,1);
+        //tarjeta1
+        card = selectCard();
+        cardList[card].appendChild(createCricle(color));
+        cardList[card].setAttribute('data-color',color);
+        addEvent(cardList[card]);
+        //tarjeta2
+        card = selectCard();
+        cardList[card].appendChild(createCricle(color));
+        cardList[card].setAttribute('data-color',color);
+        addEvent(cardList[card]);
     } 
-        setInterval(function(){
-            if (complete == 0){
-            let cronometro;
-            segundos+=1;
-            cronometro = document.getElementById('cronometro');
-            cronometro.innerHTML = segundos;}
-         }, 1000);
+
+    setInterval(function(){
+        if (final == 0){
+            seconds += 1;
+            clock = document.getElementById('clock');
+            clock.innerHTML = seconds;}
+        }, 1000);
 
 
 }
